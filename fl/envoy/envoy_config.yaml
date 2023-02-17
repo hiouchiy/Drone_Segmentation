@@ -1,0 +1,10 @@
+params:
+  cuda_devices: []
+
+optional_plugin_components: {}
+
+shard_descriptor:
+  template: droneimage_shard_descriptor.DroneShardDescriptor
+  params:
+    data_folder: Custum_Dataset/Car/JPEGImages
+    mask_folder: Custum_Dataset/Car/SegmentationClass
