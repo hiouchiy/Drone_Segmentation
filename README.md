@@ -5,32 +5,34 @@ It also introduces the source code for fine tuning based on the models and techn
 
 ## The definition of classes on the model
 Since the open data "Semantic Drone Dataset" is a dataset consisting of 24 classes as shown below, this model classifies the same 24 classes.
-|ID|Class name|RGB|
-|-|-|-|
-|0|ラベルなし|0, 0, 0|
-|1|道路|128, 64, 128|
-|2|土壌|130, 76, 0|
-|3|草原|0, 102, 0|
-|4|砂利|112, 103, 87|
-|5|水|28, 42, 168|
-|6|岩|48, 41, 30|
-|7|プール|0, 50, 89|
-|8|草木|107, 142, 35|
-|9|屋根|70, 70, 70|
-|10|壁|102, 102, 156|
-|11|窓|254, 228, 12|
-|12|ドア|254, 148, 12|
-|13|フェンス|190, 153, 153|
-|14|フェンス支柱|153, 153, 153|
-|15|人|255, 22, 96|
-|16|犬|102, 51, 0|
-|17|車|9, 143, 150|
-|18|自転車|119, 11, 32|
-|19|木|51, 51, 0|
-|20|枯れ木|190, 250, 190|
-|21|arマーカー|112, 150, 146|
-|22|障害|2, 135, 115|
-|23|衝突|255, 0, 0|
+
+| Name        | R   | G   | B   |
+| ----------- | --- | --- | --- |
+| unlabeled   | 0   | 0   | 0   | <p align="center"><img width = "30" height= "20" src="./label_colors/unlabeled.png" /></p>   |
+| paved-area  | 128 | 64  | 128 | <p align="center"><img width = "30" height= "20" src="./label_colors/paved-area.png" /></p>  |
+| dirt        | 130 | 76  | 0   | <p align="center"><img width = "30" height= "20" src="./label_colors/dirt.png" /></p>        |
+| grass       | 0   | 102 | 0   | <p align="center"><img width = "30" height= "20" src="./label_colors/grass.png" /></p>       |
+| gravel      | 112 | 103 | 87  | <p align="center"><img width = "30" height= "20" src="./label_colors/gravel.png" /></p>      |
+| water       | 28  | 42  | 168 | <p align="center"><img width = "30" height= "20" src="./label_colors/water.png" /></p>       |
+| rocks       | 48  | 41  | 30  | <p align="center"><img width = "30" height= "20" src="./label_colors/rocks.png" /></p>       |
+| pool        | 0   | 50  | 89  | <p align="center"><img width = "30" height= "20" src="./label_colors/pool.png" /></p>        |
+| vegetation  | 107 | 142 | 35  | <p align="center"><img width = "30" height= "20" src="./label_colors/vegetation.png" /></p>  |
+| roof        | 70  | 70  | 70  | <p align="center"><img width = "30" height= "20" src="./label_colors/roof.png" /></p>        |
+| wall        | 102 | 102 | 156 | <p align="center"><img width = "30" height= "20" src="./label_colors/wall.png" /></p>        |
+| window      | 254 | 228 | 12  | <p align="center"><img width = "30" height= "20" src="./label_colors/window.png" /></p>      |
+| door        | 254 | 148 | 12  | <p align="center"><img width = "30" height= "20" src="./label_colors/door.png" /></p>        |
+| fence       | 190 | 153 | 153 | <p align="center"><img width = "30" height= "20" src="./label_colors/fence.png" /></p>       |
+| fence-pole  | 153 | 153 | 153 | <p align="center"><img width = "30" height= "20" src="./label_colors/fence-pole.png" /></p>  |
+| person      | 255 | 22  | 0   | <p align="center"><img width = "30" height= "20" src="./label_colors/person.png" /></p>      |
+| dog         | 102 | 51  | 0   | <p align="center"><img width = "30" height= "20" src="./label_colors/dog.png" /></p>         |
+| car         | 9   | 143 | 150 | <p align="center"><img width = "30" height= "20" src="./label_colors/car.png" /></p>         |
+| bicycle     | 119 | 11  | 32  | <p align="center"><img width = "30" height= "20" src="./label_colors/bicycle.png" /></p>     |
+| tree        | 51  | 51  | 0   | <p align="center"><img width = "30" height= "20" src="./label_colors/tree.png" /></p>        |
+| bald-tree   | 190 | 250 | 190 | <p align="center"><img width = "30" height= "20" src="./label_colors/bald-tree.png" /></p>   |
+| ar-marker   | 112 | 150 | 146 | <p align="center"><img width = "30" height= "20" src="./label_colors/ar-marker.png" /></p>   |
+| obstacle    | 2   | 135 | 115 | <p align="center"><img width = "30" height= "20" src="./label_colors/obstacle.png" /></p>    |
+| conflicting | 255 | 0   | 0   | <p align="center"><img width = "30" height= "20" src="./label_colors/conflicting.png" /></p> |
+
 
 ## Getting Started
 ### Prerequisites
