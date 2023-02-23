@@ -1,4 +1,3 @@
-# Aerial Drone Imageを用いたセグメンテーション
 # Segmentation using Aerial Drone Images
 This repository provides a semantic segmentation model created using open data called [Semantic Drone Dataset](https://www.kaggle.com/datasets/bulentsiyah/semantic-drone-dataset).
 
