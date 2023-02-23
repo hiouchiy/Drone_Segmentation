@@ -1,9 +1,12 @@
 # Aerial Drone Imageを用いたセグメンテーション
-このレポジトリではオープンデータ「[Semantic Drone Dataset](https://www.kaggle.com/datasets/bulentsiyah/semantic-drone-dataset)」を用いたセマンティック・セグメンテーションのモデルを公開している。
-かつ、そのモデルをベースにファインチューニングを行うソースコードや、モデルの推論を高速化するテクニックなども紹介している。
-## オープンデータのクラス
-オープンデータ「Semantic Drone Dataset」は24Classから構成されるデータセットでアノテーションとクラスの対応は以下のとおりである。
-|id|クラス名|RGB値|
+# Segmentation using Aerial Drone Images
+This repository provides a semantic segmentation model created using open data called [Semantic Drone Dataset](https://www.kaggle.com/datasets/bulentsiyah/semantic-drone-dataset).
+
+It also introduces the source code for fine tuning based on the models and techniques to speed up the inference of the models.
+
+## The definition of classes on the model
+Since the open data "Semantic Drone Dataset" is a dataset consisting of 24 classes as shown below, this model classifies the same 24 classes.
+|ID|Class name|RGB|
 |-|-|-|
 |0|ラベルなし|0, 0, 0|
 |1|道路|128, 64, 128|
@@ -30,21 +33,21 @@
 |22|障害|2, 135, 115|
 |23|衝突|255, 0, 0|
 
-## Getting Started / スタートガイド
-### Prerequisites / 必要条件
-#### オンプレでやる場合
-- Intel CPU（Core or Xeon）を搭載したマシン
-    - Core: 第10世代以上
-    - Xeon: 第2世代Xeonスケーラブル・プロセッサー以上
-- OS: Windows 10(WSL2) / Ubuntu 18.04以降
-- Docker（※以下にインストール手順記載）
-#### Google Colaboratoryでやる場合
-- インターネット環境にアクセスできるWin10/Mac/Linux PC
-- Googleアカウント
-### Installing / インストール
-#### ホストOSのポート開放（リモートアクセスする場合のみ）
-このハンズオンではJupyter Labを使用します。特にサーバーにリモートアクセスしながら実施する場合は各環境ごとの手順に則り、ホストOSのポート「8080」番を開放ください。
-#### Dockerインストール
+## Getting Started
+### Prerequisites
+#### For On-prem environment
+- Machine with Intel CPU (Core or Xeon)
+    - Core: 10th generation or higher
+    - Xeon: 2nd generation Xeon scalable processor or higher
+- OS: Windows 10(WSL2) / Ubuntu 18.04 or later
+- Docker (*Installation procedure described below)
+#### For Google Colaboratory
+- Win10/Mac/Linux PC with access to internet environment
+- Google account
+### Installing
+#### Open host OS ports (only if accessing remotely)
+This repo uses Jupyter Lab. In particular, if you will be accessing the server remotely, open port 8888 on the host OS in accordance with the procedures for each environment.
+#### Install Docker
 ```Bash
 sudo apt update
 sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
@@ -58,17 +61,17 @@ su - ${USER}
 id -nG
 ```
 
-#### Dockerイメージのダウンロード
+#### Download Docker image
 ```Bash
 docker pull continuumio/anaconda3
 ```
-#### Dockerコンテナの起動
-コンテナはRootで起動します。また、8888番ポートをホストOSとコンテナとでバインドしておきます。
+#### Launch Docker container
+The container is started as the Root user. Also, port 8888 should be bound to the host OS and the container.
 ```Bash
 sudo docker run -it -u 0 --privileged -p 8888:8888 continuumio/anaconda3 /bin/bash
 ```
-以降はコンテナ上での作業になります。
-#### 追加モジュールのインストール
+Thereafter, the work will be done on the container.
+#### Install additional software
 ```Bash
 apt-get update
 apt-get install -y wget unzip git sudo vim numactl
@@ -79,17 +82,17 @@ pip install --upgrade pip
 pip install torch torchvision torchaudio pandas scikit-learn statistics pillow opencv-python albumentations tqdm matplotlib typing-extensions==4.4.0 jupyterlab segmentation-models-pytorch torchsummary
 pip install ipywidgets widgetsnbextension
 ```
-#### 本レポジトリをClone
+#### Clone this repo
 ```Bash
 cd ~
 git clone https://github.com/hiouchiy/Drone_Segmentation.git
 ```
-#### Jupyter Labの起動
+#### Launch Jupyter Lab
 ```Bash
 jupyter lab --allow-root --ip=0.0.0.0 --no-browser --port=8888
 ```
-#### WebブラウザからJupyter Labにアクセス
-前のコマンド実行すると以下のようなログが出力されまして、最後にローカルホスト（127.0.0.1）のトークン付きURLが表示されるはずです。こちらをWebブラウザにペーストしてアクセスください。リモートアクセスされている場合はIPアドレスをサーバーのホストOSのIPアドレスに変更してください。
+#### Access the Jupyter lab from Web browser(MS Edge or Chrome)
+After executing the previous command, you should see the following log output, with the URL with a token for the local host (127.0.0.1) at the end. Paste this URL into your web browser to access the site. If you are accessing remotely, change the IP address to the IP address of the server's host OS.
 ```
 root@f79f54d47c1b:~# jupyter lab --allow-root --ip=0.0.0.0 --no-browser
 [I 09:13:08.932 LabApp] JupyterLab extension loaded from /usr/local/lib/python3.6/dist-packages/jupyterlab
@@ -107,28 +110,29 @@ root@f79f54d47c1b:~# jupyter lab --allow-root --ip=0.0.0.0 --no-browser
         http://f79f54d47c1b:8888/?token=2d6863a5b833a3dcb1a57e3252e641311ea7bc8e65ad9ca3
      or http://127.0.0.1:8888/?token=2d6863a5b833a3dcb1a57e3252e641311ea7bc8e65ad9ca3
 ```
-↑こちらの例の場合は、最後の "http://127.0.0.1:8888/?token=2d6863a5b833a3dcb1a57e3252e641311ea7bc8e65ad9ca3" です。
-#### Notebookの起動
-Jupyter Lab上で下記の中から好みのノートブックを開き、後はノートブックの内容に従って進めてください。
+↑For example in above log, the last row is showing the URL to Jupyter lab. "http://127.0.0.1:8888/?token=2d6863a5b833a3dcb1a57e3252e641311ea7bc8e65ad9ca3" です。
+#### Open a notebook in Jupyter lab
+Open the notebook of your choice from the list below in Jupyter Lab, and then follow the contents of the notebook.
 
-- TrainModel.ipynb
-[Semantic Drone Dataset](https://www.kaggle.com/datasets/bulentsiyah/semantic-drone-dataset)」を用いた学習
-- Test_PreTrainModel.ipynb
-[事前学習済みのモデル](https://drive.google.com/file/d/14PtYuFZc-5sB2n9lLUDku8bgyEKSLZG5/view?usp=share_link)を用いて対象データに対してのセグメンテーションを実施する
-- Fine-Tuning.ipynb
-[事前学習済みのモデル](https://drive.google.com/file/d/14PtYuFZc-5sB2n9lLUDku8bgyEKSLZG5/view?usp=share_link)をベースとして、カスタム画像データを用いてFine-Tuning(転移学習)を行う
-- Test_CustumModel.ipynb
-[Fine-Tuningを行ったモデル](https://drive.google.com/file/d/1JXPHg4brau1T93z79VNr4VqLeCEx2CcW/view?usp=share_link)を用いて対象画像データに対してのセグメンテーションを実施する
-- Model_Optimization_and_Quantization.ipynb
-モデルの推論をCPU上で高速化するためのテクニック集
-##### 実行方法
-ノートブックのパス設定を任意のパスに書き換えてノートブック上部から実行
-- IMAGE_PATH, MASK_PATH セグメンテーション対象データの入力画像とアノテーション画像のファイルパス
-- MODEL_PATH　事前学習済みのモデルを保存しているファイルパス
-- SAVE_PATH　セグメンテーションの結果 or Fine-Tuningを行ったモデルを保存するフォルダパス
+- TrainModel.ipynb: 
+Train a model with 
+[Semantic Drone Dataset](https://www.kaggle.com/datasets/bulentsiyah/semantic-drone-dataset)」
+- Test_PreTrainModel.ipynb: 
+Infer images with [the trained model](https://drive.google.com/file/d/14PtYuFZc-5sB2n9lLUDku8bgyEKSLZG5/view?usp=share_link).
+- Fine-Tuning.ipynb: 
+Fine tune [our trained model](https://drive.google.com/file/d/14PtYuFZc-5sB2n9lLUDku8bgyEKSLZG5/view?usp=share_link) with custom dataset.
+- Test_CustumModel.ipynb: 
+Infer images with [the fine tuned model](https://drive.google.com/file/d/1JXPHg4brau1T93z79VNr4VqLeCEx2CcW/view?usp=share_link).
+- Model_Optimization_and_Quantization.ipynb: 
+Some techniques to accelerate model inference on CPU.
+##### Hint to run correctly
+Rewrite the notebook path setting to any path and run from the top of the notebook
+- IMAGE_PATH, MASK_PATH: Path to the folder containing the image data and annotated images for model training
+- MODEL_PATH: Path to the pre-trained model files
 
-## License / ライセンス
-このプロジェクトは MITライセンスです。
 
-## Acknowledgments / 謝辞
-本ソースコードは[こちら](https://github.com/G21TKA01/Drone_Segmentation)をベースにアレンジを加えたものです。作者である[G21TKA01](https://github.com/G21TKA01)には事前に了承を取ったうえで使用しております。改めまして、作者には素晴らしいアプリケーションを提供いただいたことに感謝いたします。
+## License
+This project is licensed under the MIT License.
+
+## Acknowledgments
+This source code is based on [here](https://github.com/G21TKA01/Drone_Segmentation) with some arrangements. The author, [G21TKA01](https://github.com/G21TKA01), has given his permission to use this code in advance. Once again, we would like to thank the author for providing us with a wonderful code.
