@@ -1,7 +1,6 @@
 # Aerial Drone Imageを用いたセグメンテーション
 このレポジトリではオープンデータ「[Semantic Drone Dataset](https://www.kaggle.com/datasets/bulentsiyah/semantic-drone-dataset)」を用いたセマンティック・セグメンテーションのモデルを公開している。
 かつ、そのモデルをベースにファインチューニングを行うソースコードや、モデルの推論を高速化するテクニックなども紹介している。
-開発環境としてGoogle Colaboratoryを前提としている。
 ## オープンデータのクラス
 オープンデータ「Semantic Drone Dataset」は24Classから構成されるデータセットでアノテーションとクラスの対応は以下のとおりである。
 |id|クラス名|RGB値|
